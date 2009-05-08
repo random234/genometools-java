@@ -30,7 +30,7 @@ public class Block
   }
   
   public Block(Pointer ptr) {
-    if(block_ptr == null) { GTerror.gtexcept("Block Pointer cannot be Null"); }
+    if(ptr == null) { GTerror.gtexcept("Block Pointer cannot be Null"); }
     block_ptr = GT.INSTANCE.gt_block_ref(ptr);
   }
   

@@ -27,4 +27,21 @@ public class Range extends Structure
     long iend = end.longValue();
     return (int)iend - (int)istart;
   }
+  
+  public void set_start(int start){
+    NativeLong tmp = new NativeLong(start);
+    this.start = tmp;
+  }
+  public void set_end(int end){
+    NativeLong tmp = new NativeLong(end);
+    this.end = tmp;
+  }
+  public int get_start() {
+    long l_tmp = this.start.longValue();
+    return (int)l_tmp;
+  }
+  public int get_end() {
+    long l_tmp = this.end.longValue();
+    return (int)l_tmp;
+  }
 }

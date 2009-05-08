@@ -7,7 +7,7 @@ import com.sun.jna.Pointer;
 
 public class ImageInfo
 {
-  protected Pointer image_info_ptr;
+  private Pointer image_info_ptr;
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);

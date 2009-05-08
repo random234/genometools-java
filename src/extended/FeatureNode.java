@@ -9,7 +9,7 @@ import extended.GenomeNode;
 
 public class FeatureNode extends GenomeNode
 {
-  private String[] STRANDCHARS = { "+", "-", ".", "?" };
+  private char[] STRANDCHARS = { '+','-','.','?' };
   
   public interface GT extends Library
   {
@@ -47,18 +47,21 @@ public class FeatureNode extends GenomeNode
     
   }
 
-  public FeatureNode(Pointer seqid, String type, int start, int end, int strand)
+  public FeatureNode(String seqid, String type, int start, int end, String stra)
   {
+    char strand = stra.charAt(0);
     switch (strand) {
-    case '+':
+    case '+': strand = 0;
       break;
-    case '-':
+    case '-': strand = 1;
       break;
-    case '.':
+    case '.': strand = 2;
+      break;
+    case '?': strand = 3;
       break;
     default:
       GTerror.gtexcept("Invalid Strand " + (char) strand
-          + " must be one of: [+ - .]");
+          + " must be one of: [+ - . ?]");
     }
     Str s = new Str(seqid);
     NativeLong stmp = new NativeLong(start);
@@ -68,27 +71,27 @@ public class FeatureNode extends GenomeNode
     this.genome_node_ptr = newfn;
   }
 
-  public void node_add_child(Pointer child)
+  public void add_child(FeatureNode child)
   {
-    GT.INSTANCE.gt_feature_node_add_child(this.genome_node_ptr, child);
+    GT.INSTANCE.gt_feature_node_add_child(this.genome_node_ptr, child.to_ptr());
   }
 
-  public String node_get_source()
+  public String get_source()
   {
     return GT.INSTANCE.gt_feature_node_get_source(this.genome_node_ptr);
   }
 
-  public void node_set_source(Pointer source)
+  public void set_source(Pointer source)
   {
     GT.INSTANCE.gt_feature_node_set_source(this.genome_node_ptr, source);
   }
 
-  public String node_get_type()
+  public String get_type()
   {
     return GT.INSTANCE.gt_feature_node_get_type(this.genome_node_ptr);
   }
 
-  public Boolean node_has_type(String type)
+  public Boolean has_type(String type)
   {
     return GT.INSTANCE.gt_feature_node_has_type(this.genome_node_ptr, type);
   }
@@ -98,7 +101,7 @@ public class FeatureNode extends GenomeNode
     return GT.INSTANCE.gt_feature_node_score_is_defined(this.genome_node_ptr);
   }
 
-  public float node_get_score()
+  public float get_score()
   {
     if (this.score_is_defined() == true) {
       return GT.INSTANCE.gt_feature_node_get_score(this.genome_node_ptr);
@@ -107,53 +110,55 @@ public class FeatureNode extends GenomeNode
     }
   }
 
-  public void node_set_score(float score)
+  public void set_score(float score)
   {
     GT.INSTANCE.gt_feature_node_set_score(this.genome_node_ptr, score);
   }
 
-  public void node_unset_score()
+  public void unset_score()
   {
     GT.INSTANCE.gt_feature_node_unset_score(this.genome_node_ptr);
   }
 
-  public String node_get_strand()
+  public char get_strand()
   {
     return STRANDCHARS[GT.INSTANCE.gt_feature_node_get_strand(this.genome_node_ptr)];
   }
 
-  public void node_set_strand(int strand)
+  public void set_strand(String stra)
   {
+    char strand = stra.charAt(0);
     switch (strand) {
-    case '+':
+    case '+': strand = 0; 
       break;
-    case '-':
+    case '-': strand = 1;
       break;
-    case '.':
+    case '.': strand = 2;
       break;
+    case '?': strand = 3;
     default:
       GTerror.gtexcept("Invalid Strand " + (char) strand
-          + " must be one of: [+ - .]");
+          + " must be one of: [+ - . ?]");
     }
     GT.INSTANCE.gt_feature_node_set_strand(genome_node_ptr, strand);
   }
 
-  public int node_get_phase()
+  public int get_phase()
   {
     return GT.INSTANCE.gt_feature_node_get_phase(this.genome_node_ptr);
   }
 
-  public void node_set_phase(int strand)
+  public void set_phase(int strand)
   {
     GT.INSTANCE.gt_feature_node_set_phase(this.genome_node_ptr, strand);
   }
 
-  public String node_get_attribute(String name)
+  public String get_attribute(String name)
   {
     return GT.INSTANCE.gt_feature_node_get_attribute(this.genome_node_ptr, name);
   }
 
-  public void node_add_attribute(String tag, String value)
+  public void add_attribute(String tag, String value)
   {
     if (tag.toString() == "" || value.toString() == "") {
       GTerror.gtexcept("attribute keys or values must not be empty");
@@ -162,7 +167,7 @@ public class FeatureNode extends GenomeNode
     }
   }
 
-  public void node_foreach_attribute(Pointer feature_node)
+  public void foreach_attribute(Pointer feature_node)
   {
       
   }

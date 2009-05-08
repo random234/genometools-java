@@ -4,7 +4,7 @@ import com.sun.jna.*;
 import core.Range;
 import core.GTerror;
 
-public class GenomeNode
+abstract class GenomeNode
 {
   protected Pointer genome_node_ptr;
 
@@ -42,7 +42,7 @@ public class GenomeNode
     Range ran = new Range((int)nstart.longValue(), (int)nend.longValue());
     return ran;
   }
-  String get_filename(Pointer gn)
+  String get_filename()
   {
     return GT.INSTANCE.gt_genome_node_get_filename(this.genome_node_ptr);
   }
@@ -56,4 +56,7 @@ public class GenomeNode
     }
   }
   
+  public Pointer to_ptr() {
+    return genome_node_ptr;
+  }  
 }

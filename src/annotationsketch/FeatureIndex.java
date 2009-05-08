@@ -27,7 +27,7 @@ public abstract class FeatureIndex
     Pointer gt_feature_index_get_features_for_seqid(Pointer fi, String seqid);
     String gt_feature_index_get_first_seqid(Pointer fi);
     Pointer gt_feature_index_get_seqids(Pointer fi);
-    void gt_feature_index_get_range_for_seqid(Pointer fi, Pointer rng,
+    void gt_feature_index_get_range_for_seqid(Pointer fi, Range rng,
         String seqid);
     Boolean gt_feature_index_has_seqid(Pointer fi, String seqid);
   }
@@ -78,7 +78,7 @@ public abstract class FeatureIndex
       GTerror.gtexcept("featureIndex does not contain seqid");
     }
     Range ran = new Range();
-    GT.INSTANCE.gt_feature_index_get_range_for_seqid(this.feat_index, ran.getPointer(), seqid);
+    GT.INSTANCE.gt_feature_index_get_range_for_seqid(this.feat_index, ran, seqid);
     return ran;
   }
   

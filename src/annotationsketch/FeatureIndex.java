@@ -52,11 +52,11 @@ public abstract class FeatureIndex
     return null;
   }
   
-  public void add_gff3file(String filename) {
+  public void add_gff3file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_feature_index_add_gff3file(this.feat_index, filename, err.to_ptr());
     if (rval != 0) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(), err.to_ptr());
     }
   }
   
@@ -73,9 +73,9 @@ public abstract class FeatureIndex
     return results;
   }
   
-  public Range get_range_for_seqid(String seqid) {
+  public Range get_range_for_seqid(String seqid) throws GTerror {
     if(GT.INSTANCE.gt_feature_index_has_seqid(this.feat_index, seqid) == false) {
-      GTerror.gtexcept("featureIndex does not contain seqid");
+      throw new GTerror("FeatureIndex does not contain seqid");
     }
     Range ran = new Range();
     GT.INSTANCE.gt_feature_index_get_range_for_seqid(this.feat_index, ran, seqid);

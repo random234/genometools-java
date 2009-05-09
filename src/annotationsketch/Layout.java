@@ -19,12 +19,11 @@ public class Layout
     void gt_layout_delete(Pointer gt_lay_ptr);
   }
   
-  public Layout(Diagram diagram, int width, Style style) {
+  public Layout(Diagram diagram, int width, Style style) throws GTerror {
     GTerror err = new GTerror();
     NativeLong w_long = new NativeLong(width);
-    
     layout_ptr = GT.INSTANCE.gt_layout_new(diagram.to_ptr(), w_long, style.to_ptr(), err.to_ptr());
-    if(layout_ptr == null) { GTerror.gtexcept(err); }
+    if(layout_ptr == null) { throw new GTerror(err.get_err(),err.to_ptr()); }
   }
   
   public void finalize() {
@@ -37,10 +36,10 @@ public class Layout
     return (int)i_tmp;
   }
   
-  public void sketch(Canvas canvas) {
+  public void sketch(Canvas canvas) throws GTerror {
     GTerror err = new GTerror();
     int had_err = GT.INSTANCE.gt_layout_sketch(layout_ptr, canvas.to_ptr(), err.to_ptr());
-    if(had_err < 0) { GTerror.gtexcept(err);  }
+    if(had_err < 0) { throw new GTerror(err.get_err(),err.to_ptr());  }
   }
   
   public Pointer to_ptr() {

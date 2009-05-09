@@ -36,19 +36,14 @@ public class FeatureNode extends GenomeNode
     void gt_feature_node_foreach_attribute(Pointer feature_node,
         Pointer attributeiterfunc, Pointer data);
   }
-
-  public FeatureNode(Pointer node_ptr, Boolean newref)
+  public FeatureNode(Pointer node_ptr, Boolean newref) 
   {
     super(node_ptr, newref);
   }
 
-  protected void finalize()
-  {
-    
-  }
-
   public FeatureNode(String seqid, String type, int start, int end, String stra)
   {
+    try {
     char strand = stra.charAt(0);
     switch (strand) {
     case '+': strand = 0;
@@ -60,7 +55,7 @@ public class FeatureNode extends GenomeNode
     case '?': strand = 3;
       break;
     default:
-      GTerror.gtexcept("Invalid Strand " + (char) strand
+      throw new GTerror("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
     Str s = new Str(seqid);
@@ -69,6 +64,7 @@ public class FeatureNode extends GenomeNode
     Pointer newfn = GT.INSTANCE.gt_feature_node_new(s.to_ptr(), type, stmp,
         etmp, strand);
     this.genome_node_ptr = newfn;
+    } catch (GTerror e) { e.printStackTrace(); }
   }
 
   public void add_child(FeatureNode child)
@@ -125,7 +121,7 @@ public class FeatureNode extends GenomeNode
     return STRANDCHARS[GT.INSTANCE.gt_feature_node_get_strand(this.genome_node_ptr)];
   }
 
-  public void set_strand(String stra)
+  public void set_strand(String stra) throws GTerror
   {
     char strand = stra.charAt(0);
     switch (strand) {
@@ -137,7 +133,7 @@ public class FeatureNode extends GenomeNode
       break;
     case '?': strand = 3;
     default:
-      GTerror.gtexcept("Invalid Strand " + (char) strand
+      throw new GTerror("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
     GT.INSTANCE.gt_feature_node_set_strand(genome_node_ptr, strand);
@@ -158,17 +154,12 @@ public class FeatureNode extends GenomeNode
     return GT.INSTANCE.gt_feature_node_get_attribute(this.genome_node_ptr, name);
   }
 
-  public void add_attribute(String tag, String value)
+  public void add_attribute(String tag, String value) throws GTerror
   {
     if (tag.toString() == "" || value.toString() == "") {
-      GTerror.gtexcept("attribute keys or values must not be empty");
+      throw new GTerror("attribute keys or values must not be empty");
     } else {
       GT.INSTANCE.gt_feature_node_add_attribute(this.genome_node_ptr, tag, value);
     }
-  }
-
-  public void foreach_attribute(Pointer feature_node)
-  {
-      
   }
 }

@@ -21,7 +21,7 @@ abstract class GenomeNode
   }
   protected GenomeNode() {
   }
-  public GenomeNode(Pointer node_ptr, Boolean newref)
+  public GenomeNode(Pointer node_ptr, Boolean newref) 
   {
     if (newref) {
       genome_node_ptr = GT.INSTANCE.gt_genome_node_ref(node_ptr);
@@ -32,6 +32,7 @@ abstract class GenomeNode
   protected void finalize()
   {
     GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
+    this.genome_node_ptr = null;
   }
   
   public Range get_range()
@@ -46,13 +47,13 @@ abstract class GenomeNode
   {
     return GT.INSTANCE.gt_genome_node_get_filename(this.genome_node_ptr);
   }
-  public void accept(Pointer visitor)
+  public void accept(Pointer visitor) throws GTerror
   {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_genome_node_accept(this.genome_node_ptr, visitor,
         err.to_ptr());
     if (rval != 0) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(), err.to_ptr());
     }
   }
   

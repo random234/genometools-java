@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
+import core.GTerror;
 import core.Range;
 import static org.junit.Assert.*;
 
@@ -12,7 +13,11 @@ public class FeatureIndexTest
   FeatureIndexMemory fi = new FeatureIndexMemory();
   @Before
   public void init() {
-    fi.add_gff3file("../result.gff3");
+    try {
+      fi.add_gff3file("../result.gff3");
+    } catch (GTerror e) {
+      e.printStackTrace();
+    }
   }
   @Test
   public void test_add_gff3file() {
@@ -31,7 +36,11 @@ public class FeatureIndexTest
   @Test
   public void test_get_range_for_seqid() {
     Range r = new Range();
-    r = fi.get_range_for_seqid("seq0");
+    try {
+      r = fi.get_range_for_seqid("seq0");
+    } catch (GTerror e) {
+      e.printStackTrace();
+    }
     assertTrue(r.get_size() == 5934);
   }
   @Test

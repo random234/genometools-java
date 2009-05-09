@@ -33,14 +33,14 @@ public class Diagram
 
     interface TRACKSELECTOR extends Callback
     {
-      String callback(Pointer block_ptr, Pointer data_ptr);
+      String callback(Pointer block_ptr, Pointer data_ptr) throws GTerror;
     }
   }
 
-  public Diagram(FeatureNode[] arr, Range rng, Style sty)
+  public Diagram(FeatureNode[] arr, Range rng, Style sty) throws GTerror
   {
     if (rng.get_start() > rng.get_end()) {
-      GTerror.gtexcept("range.start > range.end");
+      throw new GTerror("range.start > range.end");
     }
     Array gtarr = new Array(4);
     for (int i = 0; i < arr.length; i++) {
@@ -49,26 +49,26 @@ public class Diagram
     Pointer dia = GT.INSTANCE.gt_diagram_new_from_array(gtarr.to_ptr(), rng,
         sty.to_ptr());
     if (dia == null) {
-      GTerror.gtexcept("Diagram Pointer could not be allocated");
+      throw new GTerror("Diagram Pointer could not be allocated");
     } else {
       this.diagram_ptr = dia;
     }
   }
 
-  public Diagram(FeatureIndex feat_index, String seqid, Range ran, Style style)
+  public Diagram(FeatureIndex feat_index, String seqid, Range ran, Style style) throws GTerror
   {
-    GTerror err = new GTerror();
+
     if (ran.start.longValue() < ran.end.longValue()) {
-      GTerror.gtexcept("range.start > range.end");
+      throw new GTerror("range.start > range.end");
     }
     if (style.equals(Style.class)) {
-      GTerror.gtexcept("style parameter has to be a style Object");
+      throw new GTerror("style parameter has to be a style Object");
     }
-
+    GTerror err = new GTerror();
     Pointer dia = GT.INSTANCE.gt_diagram_new(feat_index.to_ptr(), seqid, ran
         .getPointer(), style.to_ptr(), err.to_ptr());
     if (dia == null) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(),err.to_ptr());
     } else {
       this.diagram_ptr = dia;
     }
@@ -78,16 +78,14 @@ public class Diagram
   {
     TRACKSELECTOR tsf = new GT.TRACKSELECTOR()
     {
-      public String callback(Pointer block_ptr, Pointer data_ptr)
+      public String callback(Pointer block_ptr, Pointer data_ptr) throws GTerror
       {
         Block b = new Block(block_ptr);
         String string = ts.getTrackId(b);
         if (string != null) {
           return string;
         } else {
-          GTerror
-              .gtexcept("String returned by Trackselector function can not be null");
-          return "GTerror";
+          throw new GTerror("String returned by Trackselector function can not be null");
         }
       }
     };

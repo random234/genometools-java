@@ -17,12 +17,12 @@ public class CanvasCairoFile extends CanvasCairo
     void gt_canvas_delete(Pointer canvas);
   }
   
-  public CanvasCairoFile(Style style, int width, int height, ImageInfo image_info) {
+  public CanvasCairoFile(Style style, int width, int height, ImageInfo image_info) throws GTerror{
     NativeLong n_width = new NativeLong(width);
     NativeLong n_height = new NativeLong(height);
     
     if(image_info == null) {
-      GTerror.gtexcept("ImageInfo is not initialized");
+      throw new GTerror("ImageInfo is not initialized");
     } else {
       canvas_ptr = GT.INSTANCE.gt_canvas_cairo_file_new(style.to_ptr(), 1, n_width, n_height, image_info.to_ptr());
     }
@@ -38,11 +38,10 @@ public class CanvasCairoFile extends CanvasCairo
     GT.INSTANCE.gt_canvas_delete(canvas_ptr);
   }
   
-  public void to_file(String filename) {
+  public void to_file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_canvas_cairo_file_to_file(canvas_ptr, filename, err.to_ptr());
-    if (rval != 0) { GTerror.gtexcept(err);
-  } 
+    if (rval != 0) { throw new GTerror(err.get_err() ,err.to_ptr()); } 
 }
  
 }

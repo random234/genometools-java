@@ -2,16 +2,17 @@ package annotationsketch;
 
 import org.junit.*;
 
+import core.GTerror;
 import core.Range;
 
 import extended.FeatureNode;
 public class SketchTest
 {
-  
   @Before
   public void init() {
     // construct a gene on the forward strand with two exons
     String seqid = "chromosome21";
+    try {
     FeatureNode gene = new FeatureNode(seqid, "gene", 100, 900, "+");
     FeatureNode exon = new FeatureNode(seqid, "exon", 100, 200, "+");
     gene.add_child(exon);
@@ -47,13 +48,11 @@ public class SketchTest
     CanvasCairoFile can = new CanvasCairoFile(sty, 800, height);
     lay.sketch(can);
     can.to_file("test.png");
+    } catch (GTerror e) { System.out.println(e.getCause()); e.printStackTrace(); }
   }
   
   @Test
   public void test_sketch() {
     init();
   }
-  
-  
-  
 }

@@ -2,9 +2,15 @@ package core;
 
 import com.sun.jna.*;
 
-public class GTerror
+// The GtError class is a Throwable that is able to communicate low level genometools API Errors to the user of the Api
+// Therefore it has four Constructos which can be used to attach a cause to the GTerror Object
+public class GTerror extends Exception 
 {
-  protected Pointer error;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 813149150202370867L;
+  private Pointer err;
 
   public interface GT extends Library
   {
@@ -19,49 +25,61 @@ public class GTerror
 
   public GTerror()
   {
-    error = GT.INSTANCE.gt_error_new();
+    this.err = GT.INSTANCE.gt_error_new();
   }
-  public GTerror(Pointer err)
+  public GTerror(String err_mess)
   {
-    error = err;
+    super(err_mess);
+    this.err = GT.INSTANCE.gt_error_new();
+  }
+
+  public GTerror(String err_mess, Throwable cause)
+  {
+    super(err_mess, cause);
+    this.err = GT.INSTANCE.gt_error_new();
+  }
+
+  public GTerror(String err_mess, Pointer err)
+  {
+    super(err_mess);
+    this.err = err;
+  }
+
+  public GTerror(String err_mess, Throwable cause, Pointer err)
+  {
+    super(err_mess, cause);
+    this.err = err;
   }
   protected void finalize()
   {
-    GT.INSTANCE.gt_error_delete(error);
+    GT.INSTANCE.gt_error_delete(err);
+    this.err = null;
   }
-  private String get()
+  public String get_err()
   {
-    return GT.INSTANCE.gt_error_get(this.error);
+    return GT.INSTANCE.gt_error_get(this.err);
   }
   public Boolean is_set()
   {
-    return GT.INSTANCE.gt_error_is_set(this.error);
+    return GT.INSTANCE.gt_error_is_set(this.err);
   }
   public void unset()
   {
-    GT.INSTANCE.gt_error_unset(this.error);
+    GT.INSTANCE.gt_error_unset(this.err);
   }
-  public static void gtexcept(GTerror err)
-  {
-    try {
-      if (err instanceof GTerror) {
-        throw new Exception("Genometools Error " + err.get() + "");
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-  public static void gtexcept(String err)
-  {
-    try {
-      throw new Exception("Java Wrapper Exception: " + err + "");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
+  // public static void gtexcept(GTerror err) throws GTerror
+  // {
+  // if (err instanceof GTerror) {
+  // throw new GTerror("Genometools Error " + err.get() + "");
+  // }
+  // }
+  // public static void gtexcept(String err) throws GTerror
+  // {
+  // throw new GTerror("Java Wrapper Exception: " + err + "");
+  // }
 
   public Pointer to_ptr()
   {
-    return error;
+    return err;
   }
 }

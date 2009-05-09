@@ -1,6 +1,7 @@
 package extended;
 import org.junit.*;
 
+import core.GTerror;
 import core.Range;
 import static org.junit.Assert.*;
 
@@ -10,8 +11,10 @@ public class FeatureNodeTest
   FeatureNode fn2 = new FeatureNode("test", "type2",600,700,"+");
   @Before
   public void init() {
+    try {
     fn.add_attribute("test", "testval");
-    fn.add_attribute("test2", "testval");  
+    fn.add_attribute("test2", "testval");
+    } catch (GTerror e) { System.err.println(e.getCause()); e.printStackTrace(); }
   }
   
   @Test
@@ -43,7 +46,11 @@ public class FeatureNodeTest
   }
   @Test 
   public void test_set_strand() {
-    fn.set_strand("+");
+    try {
+      fn.set_strand("+");
+    } catch (GTerror e) {     
+      e.printStackTrace();
+    }
     assertTrue(fn.get_strand() == '+');
   }
   @Test

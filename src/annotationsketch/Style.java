@@ -42,37 +42,37 @@ public class Style
     void gt_style_delete(Pointer style);
   }
 
-  public Style()
+  public Style() throws GTerror
   {
     GTerror err = new GTerror();
     style_ptr = GT.INSTANCE.gt_style_new(err.to_ptr());
     if (style_ptr == null) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(),err.to_ptr());
     }
   }
 
-  public void load_file(String filename)
+  public void load_file(String filename) throws GTerror
   {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE
         .gt_style_load_file(style_ptr, filename, err.to_ptr());
     if (rval != 0) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(),err.to_ptr());
     }
   }
 
-  public void load_str(String str)
+  public void load_str(String str) throws GTerror
   {
     GTerror err = new GTerror();
     Str str_obj = new Str(str);
     int rval = GT.INSTANCE.gt_style_load_str(style_ptr, str_obj.to_ptr(), err
         .to_ptr());
     if (rval != 0) {
-      GTerror.gtexcept(err);
+      throw new GTerror(err.get_err(),err.to_ptr());
     }
   }
 
-  public Str to_str()
+  public Str to_str() throws GTerror
   {
     GTerror err = new GTerror();
     Str str_obj = new Str("");
@@ -81,13 +81,12 @@ public class Style
     if (rval == 0) {
       return str_obj;
     } else {
-      GTerror.gtexcept(err);
-      return null;
+      throw new GTerror(err.get_err(), err.to_ptr());
     }
 
   }
 
-  public Style clone()
+  public Style clone_style() throws GTerror
   {
     Style sty = new Style();
     Str str_obj = sty.to_str();
@@ -155,14 +154,14 @@ public class Style
     GT.INSTANCE.gt_style_set_num(style_ptr, sect, key, d_num);
   }
 
-  public boolean get_bool(String sect, String key) {
+  public boolean get_bool(String sect, String key) throws GTerror {
     Pointer feat_node = null;
     int bool = 2;
     IntByReference i_bool = new IntByReference(bool);
     boolean rval = GT.INSTANCE.gt_style_get_bool(style_ptr, sect, key, i_bool, feat_node);
     if(rval == true) {
-      if(bool == 1) { return true; } else { GTerror.gtexcept("Section doesn't exist"); return false; }  
-    } else { GTerror.gtexcept("Section doesn't exist"); return false; }  
+      if(bool == 1) { return true; } else { throw new GTerror("Section doesn't exist"); }  
+    } else { throw new GTerror("Section doesn't exist"); }  
   }
   
   public void set_bool(String sect, String key, boolean value) {

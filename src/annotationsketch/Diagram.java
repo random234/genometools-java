@@ -10,6 +10,7 @@ import com.sun.jna.Callback;
 import core.Array;
 import core.GTerror;
 import core.Range;
+import core.Str;
 import extended.FeatureNode;
 
 public class Diagram
@@ -33,7 +34,7 @@ public class Diagram
 
     interface TRACKSELECTOR extends Callback
     {
-      String callback(Pointer block_ptr, Pointer data_ptr) throws GTerror;
+      void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror;
     }
   }
 
@@ -76,16 +77,17 @@ public class Diagram
 
   public void set_track_selector_func(final TrackSelector ts)
   {
-    TRACKSELECTOR tsf = new GT.TRACKSELECTOR()
+    TRACKSELECTOR tsf = new TRACKSELECTOR()
     {
-      public String callback(Pointer block_ptr, Pointer data_ptr) throws GTerror
+      public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror
       {
         Block b = new Block(block_ptr);
-        String string = ts.getTrackId(b);
-        if (string != null) {
-          return string;
+        String s = ts.getTrackId(b);
+        Str str = new Str(str_ptr);
+        if (s instanceof String) {
+          str.append_str(s);
         } else {
-          throw new GTerror("String returned by Trackselector function can not be null");
+          throw new GTerror("Track selector function must return a string");
         }
       }
     };

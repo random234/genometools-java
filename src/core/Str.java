@@ -18,6 +18,8 @@ public class Str
 
     void gt_str_append_str(Pointer dest, Pointer src);
 
+    void gt_str_append_cstr(Pointer dest, String str);
+
     String gt_str_get(Pointer s);
 
     NativeLong gt_str_length(Pointer str);
@@ -49,6 +51,11 @@ public class Str
   public void append_str(Pointer src)
   {
     GT.INSTANCE.gt_str_append_str(str_ptr, src);
+  }
+
+  public void append_str(String str)
+  {
+    GT.INSTANCE.gt_str_append_cstr(str_ptr, str);
   }
 
   public String to_s()

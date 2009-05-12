@@ -48,9 +48,9 @@ public class Str
     GT.INSTANCE.gt_str_delete(str_ptr);
   }
 
-  public void append_str(Pointer src)
+  public void append_str(Str str)
   {
-    GT.INSTANCE.gt_str_append_str(str_ptr, src);
+    GT.INSTANCE.gt_str_append_str(str_ptr, str.to_ptr());
   }
 
   public void append_str(String str)

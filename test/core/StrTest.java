@@ -38,7 +38,7 @@ public class StrTest
     System.out.println("Testing the append_str() method of the Str class");
     Str s = new Str("ATATAT");
     Str s2 = new Str("GCGCGC");
-    s.append_str(s2.to_ptr());
+    s.append_str(s2);
     assertTrue(s.to_s().equals("ATATATGCGCGC"));
     assertTrue(!s.to_s().equals("GCGCGCATATAT"));
     assertTrue(s.length() == 12);

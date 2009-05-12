@@ -95,10 +95,10 @@ public class Diagram
     GT.INSTANCE.gt_diagram_set_track_selector_func(diagram_ptr, tsf);
   }
 
-  public void add_custom_track(Pointer ct)
+  /* public void add_custom_track(Pointer ct)
   {
     GT.INSTANCE.gt_diagram_add_custom_track(diagram_ptr, ct);
-  }
+  } */
 
   public void finalize()
   {

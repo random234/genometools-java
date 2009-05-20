@@ -36,9 +36,10 @@ public class FeatureNode extends GenomeNode
     void gt_feature_node_foreach_attribute(Pointer feature_node,
         Pointer attributeiterfunc, Pointer data);
   }
-  public FeatureNode(Pointer node_ptr, Boolean newref) 
+  
+  public FeatureNode(Pointer node_ptr) 
   {
-    super(node_ptr, newref);
+    super(node_ptr);
   }
 
   public FeatureNode(String seqid, String type, int start, int end, String stra)

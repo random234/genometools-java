@@ -44,7 +44,7 @@ public abstract class FeatureIndex
       Array a = new Array(rval);
       ArrayList<FeatureNode> results = new ArrayList<FeatureNode>();
       for (int i = 0; i < a.size(); i++) {
-        FeatureNode fn = new FeatureNode(a.get(i), true);
+        FeatureNode fn = new FeatureNode(a.get(i));
         results.add(fn);
       }
       return results;

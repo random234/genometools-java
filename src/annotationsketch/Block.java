@@ -95,7 +95,7 @@ public class Block
   {
     Pointer f = GT.INSTANCE.gt_block_get_top_level_feature(block_ptr);
     if (f != null) {
-      return new FeatureNode(f, true);
+      return new FeatureNode(f);
     } else {
       return null;
     }

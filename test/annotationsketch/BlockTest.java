@@ -14,15 +14,15 @@ import static org.junit.Assert.*;
 
 public class BlockTest
 {
-  Style s;
-  TrackSelector tsf;
-  ArrayList<Block> blist = new ArrayList<Block>();
-  FeatureNode top1, top2;
-  Diagram d;
-  Layout l;
+  static Style s;
+  static TrackSelector tsf;
+  static ArrayList<Block> blist = new ArrayList<Block>();
+  static FeatureNode top1, top2;
+  static Diagram d;
+  static Layout l;
   
-  @Before
-  public void init() throws GTerror {
+  @BeforeClass
+  public static void init() throws GTerror {
     s = new Style();
     s.set_bool("exon", "collapse_to_parent", true);
     s.set_bool("intron", "collapse_to_parent", true);

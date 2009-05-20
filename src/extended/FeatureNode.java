@@ -42,18 +42,21 @@ public class FeatureNode extends GenomeNode
     super(node_ptr);
   }
 
-  public FeatureNode(String seqid, String type, int start, int end, String stra)
+  public FeatureNode(String seqid, String type, int start, int end, String stra) throws GTerror
   {
-    try {
     char strand = stra.charAt(0);
     switch (strand) {
-    case '+': strand = 0;
+    case '+':
+      strand = 0;
       break;
-    case '-': strand = 1;
+    case '-':
+      strand = 1;
       break;
-    case '.': strand = 2;
+    case '.':
+      strand = 2;
       break;
-    case '?': strand = 3;
+    case '?':
+      strand = 3;
       break;
     default:
       throw new GTerror("Invalid Strand " + (char) strand
@@ -65,7 +68,6 @@ public class FeatureNode extends GenomeNode
     Pointer newfn = GT.INSTANCE.gt_feature_node_new(s.to_ptr(), type, stmp,
         etmp, strand);
     this.genome_node_ptr = newfn;
-    } catch (GTerror e) { e.printStackTrace(); }
   }
 
   public void add_child(FeatureNode child)

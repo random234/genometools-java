@@ -2,7 +2,6 @@ package extended;
 
 import com.sun.jna.*;
 import core.Range;
-import core.GTerror;
 
 abstract class GenomeNode
 {
@@ -21,7 +20,6 @@ abstract class GenomeNode
   }
 
   public GenomeNode() {
-    
   }
   
   public GenomeNode(Pointer node_ptr) 
@@ -42,11 +40,13 @@ abstract class GenomeNode
     Range ran = new Range((int)nstart.longValue(), (int)nend.longValue());
     return ran;
   }
+  
   String get_filename()
   {
     return GT.INSTANCE.gt_genome_node_get_filename(this.genome_node_ptr);
   }
-  public void accept(Pointer visitor) throws GTerror
+  
+ /* public void accept(Pointer visitor) throws GTerror
   {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_genome_node_accept(this.genome_node_ptr, visitor,
@@ -54,7 +54,7 @@ abstract class GenomeNode
     if (rval != 0) {
       throw new GTerror(err.get_err(), err.to_ptr());
     }
-  }
+  } */
   
   public int hashCode() {
     return this.genome_node_ptr.hashCode();    
@@ -66,7 +66,7 @@ abstract class GenomeNode
     if((obj == null) || (obj.getClass() != this.getClass()))
       return false;
     GenomeNode gn = (GenomeNode) obj;
-    return (this.to_ptr() == gn.to_ptr());
+    return (this.to_ptr().equals(gn.to_ptr()));
   }
   
   public Pointer to_ptr() {

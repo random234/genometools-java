@@ -23,6 +23,8 @@ public abstract class FeatureIndex
 
     Pointer gt_feature_index_memory_new();
     void gt_feature_index_delete(Pointer fi);
+    void gt_feature_index_add_feature_node(Pointer feature_index,
+        Pointer feature_node);
     int gt_feature_index_add_gff3file(Pointer fi, String gff3file, Pointer err);
     Pointer gt_feature_index_get_features_for_seqid(Pointer fi, String seqid);
     String gt_feature_index_get_first_seqid(Pointer fi);
@@ -52,10 +54,15 @@ public abstract class FeatureIndex
     return null;
   }
   
+  public void add_feature_node(FeatureNode fn) throws GTerror {
+    if (fn.to_ptr() == null) 
+      throw new GTerror("feature node must not be NULL");
+    GT.INSTANCE.gt_feature_index_add_feature_node(this.feat_index, fn.to_ptr());
+  }
+  
   public void add_gff3file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_feature_index_add_gff3file(this.feat_index, filename, err.to_ptr());
-    System.err.println("New gff3file added");
     if (rval != 0) {
       throw new GTerror(err.get_err(), err.to_ptr());
     }

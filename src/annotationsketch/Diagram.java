@@ -35,6 +35,7 @@ public class Diagram
         Pointer gt_style);
     void gt_diagram_set_track_selector_func(Pointer gt_diagram,
         TRACKSELECTOR func);
+    void gt_diagram_reset_track_selector_func(Pointer diagram_ptr);
     void gt_diagram_delete(Pointer gt_diagram);
 
     interface TRACKSELECTOR extends Callback
@@ -48,9 +49,9 @@ public class Diagram
     if (rng.get_start() > rng.get_end()) {
       throw new GTerror("range.start > range.end");
     }
-    Array gtarr = new Array(4);
+    Array gtarr = new Array(Pointer.SIZE);
     for (int i = 0; i < feats.size(); i++) {
-      gtarr.add(feats.get(i));
+      gtarr.add(feats.get(i).to_ptr());
     }
     Pointer dia = GT.INSTANCE.gt_diagram_new_from_array(gtarr.to_ptr(), rng,
         sty.to_ptr());
@@ -82,9 +83,13 @@ public class Diagram
 
   public void set_track_selector_func(final TrackSelector ts)
   {
+    final Diagram d = this;
     this.ts = ts;
+    
     TRACKSELECTOR tsf = new TRACKSELECTOR()
     {
+      final Diagram dia = d;
+      
       public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror
       {
         Block b = new Block(block_ptr);
@@ -96,9 +101,18 @@ public class Diagram
           throw new GTerror("Track selector function must return a string");
         }
       }
+      protected void finalize()
+      {
+        dia.reset_track_selector_func();
+      }
     };
     this.tsf = tsf;
     GT.INSTANCE.gt_diagram_set_track_selector_func(diagram_ptr, tsf);
+  }
+  
+  public void reset_track_selector_func()
+  {
+    GT.INSTANCE.gt_diagram_reset_track_selector_func(diagram_ptr);
   }
   
   protected void finalize() throws Throwable {

@@ -1,5 +1,7 @@
 package annotationsketch;
 
+import java.util.AbstractList;
+
 import annotationsketch.Diagram.GT.TRACKSELECTOR;
 
 import com.sun.jna.Library;
@@ -16,8 +18,12 @@ import extended.FeatureNode;
 public class Diagram
 {
   protected Pointer diagram_ptr;
+  // these references are kept to avoid garbage collection 
+  // of the track selector funcs as long as this object exists
   @SuppressWarnings("unused")
   private TRACKSELECTOR tsf;
+  @SuppressWarnings("unused")
+  private TrackSelector ts;
 
   public interface GT extends Library
   {
@@ -29,7 +35,6 @@ public class Diagram
         Pointer gt_style);
     void gt_diagram_set_track_selector_func(Pointer gt_diagram,
         TRACKSELECTOR func);
-    void gt_diagram_add_custom_track(Pointer gt_diagram, Pointer gt_customtrack);
     void gt_diagram_delete(Pointer gt_diagram);
 
     interface TRACKSELECTOR extends Callback
@@ -38,19 +43,19 @@ public class Diagram
     }
   }
 
-  public Diagram(FeatureNode[] arr, Range rng, Style sty) throws GTerror
+  public Diagram(AbstractList<FeatureNode> feats, Range rng, Style sty) throws GTerror
   {
     if (rng.get_start() > rng.get_end()) {
       throw new GTerror("range.start > range.end");
     }
     Array gtarr = new Array(4);
-    for (int i = 0; i < arr.length; i++) {
-      gtarr.add(arr[i]);
+    for (int i = 0; i < feats.size(); i++) {
+      gtarr.add(feats.get(i));
     }
     Pointer dia = GT.INSTANCE.gt_diagram_new_from_array(gtarr.to_ptr(), rng,
         sty.to_ptr());
     if (dia == null) {
-      throw new GTerror("Diagram Pointer could not be allocated");
+      throw new GTerror("diagram pointer was NULL");
     } else {
       this.diagram_ptr = dia;
     }
@@ -77,6 +82,7 @@ public class Diagram
 
   public void set_track_selector_func(final TrackSelector ts)
   {
+    this.ts = ts;
     TRACKSELECTOR tsf = new TRACKSELECTOR()
     {
       public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror
@@ -94,7 +100,7 @@ public class Diagram
     this.tsf = tsf;
     GT.INSTANCE.gt_diagram_set_track_selector_func(diagram_ptr, tsf);
   }
-
+  
   protected void finalize() throws Throwable {
     try {
       GT.INSTANCE.gt_diagram_delete(diagram_ptr);

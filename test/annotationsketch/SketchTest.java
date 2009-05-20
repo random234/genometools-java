@@ -1,5 +1,7 @@
 package annotationsketch;
 
+import java.util.ArrayList;
+
 import org.junit.*;
 
 import core.GTerror;
@@ -34,7 +36,9 @@ public class SketchTest
     Range rng = new Range();
     rng.set_start(1);
     rng.set_end(1000);
-    FeatureNode[] arr = { gene,reverse_gene };
+    ArrayList<FeatureNode> arr = new ArrayList<FeatureNode>();
+    arr.add(gene);
+    arr.add(reverse_gene);
     Diagram dia = new Diagram(arr, rng, sty);
     TrackSelector ts = new TrackSelector() {
       @Override
@@ -44,8 +48,8 @@ public class SketchTest
       }};
     dia.set_track_selector_func(ts);
     Layout lay = new Layout(dia, 800, sty);
-    int height = lay.get_height();
-    CanvasCairoFile can = new CanvasCairoFile(sty, 800, height);
+    long height = lay.get_height();
+    CanvasCairoFile can = new CanvasCairoFile(sty, 800, (int) height);
     lay.sketch(can);
     can.to_file("test.png");
     } catch (GTerror e) { System.out.println(e.getCause()); e.printStackTrace(); }

@@ -41,7 +41,9 @@ public class BlockTest
     gene.add_child(exon4);
     FeatureNode reverse_gene = new FeatureNode(seqid, "gene", 400, 600, "-");
     top2 = reverse_gene;
-    FeatureNode[] feats = {gene, reverse_gene};
+    ArrayList<FeatureNode> feats = new ArrayList<FeatureNode>();
+    feats.add(gene);
+    feats.add(reverse_gene);
     Range rng = new Range();
     rng.set_start(0);
     rng.set_end(1000);

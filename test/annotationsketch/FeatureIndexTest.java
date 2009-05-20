@@ -10,14 +10,12 @@ import static org.junit.Assert.*;
 
 public class FeatureIndexTest
 {
-  FeatureIndexMemory fi = new FeatureIndexMemory();
+  FeatureIndexMemory fi;
+  
   @Before
-  public void init() {
-    try {
-      fi.add_gff3file("../result.gff3");
-    } catch (GTerror e) {
-      e.printStackTrace();
-    }
+  public void init() throws GTerror {
+    fi =  new FeatureIndexMemory();
+    fi.add_gff3file("../result.gff3");
   }
   @Test
   public void test_add_gff3file() {

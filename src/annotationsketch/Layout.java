@@ -27,23 +27,23 @@ public class Layout
   }
   
   protected void finalize() throws Throwable {
-	try {
+    try {
       GT.INSTANCE.gt_layout_delete(layout_ptr);
-	} finally {
-	  super.finalize();
-	}
+    } finally {
+      super.finalize();
+    }
   }
   
-  public int get_height(){
-    NativeLong tmp = GT.INSTANCE.gt_layout_get_height(layout_ptr);
-    long i_tmp = tmp.longValue();
-    return (int)i_tmp;
+  public long get_height(){
+    return GT.INSTANCE.gt_layout_get_height(layout_ptr).longValue();
   }
   
   public void sketch(Canvas canvas) throws GTerror {
     GTerror err = new GTerror();
     int had_err = GT.INSTANCE.gt_layout_sketch(layout_ptr, canvas.to_ptr(), err.to_ptr());
-    if(had_err < 0) { throw new GTerror(err.get_err(),err.to_ptr());  }
+    if(had_err < 0) {
+      throw new GTerror(err.get_err(), err.to_ptr());  
+    }
   }
   
   public Pointer to_ptr() {

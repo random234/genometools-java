@@ -26,7 +26,7 @@ public class Layout
     if(layout_ptr == null) { throw new GTerror(err.get_err(),err.to_ptr()); }
   }
   
-  public void finalize() {
+  protected void finalize() {
     GT.INSTANCE.gt_layout_delete(layout_ptr);
   }
   

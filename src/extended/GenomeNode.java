@@ -31,8 +31,8 @@ abstract class GenomeNode
   }
   protected void finalize()
   {
-    GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
-    this.genome_node_ptr = null;
+	if (this.genome_node_ptr != null) {
+    GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr); }
   }
   
   public Range get_range()

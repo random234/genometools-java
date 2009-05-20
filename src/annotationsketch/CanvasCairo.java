@@ -16,4 +16,9 @@ public abstract class CanvasCairo extends Canvas
     int gt_canvas_cairo_file_to_file(Pointer canvas, String filename, GTerror err);
     void gt_canvas_delete(Pointer canvas);
   }
+  protected void finalize() {
+	  super.finalize();
+  }
+  
+  
 }

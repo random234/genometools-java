@@ -34,8 +34,8 @@ public class CanvasCairoFile extends CanvasCairo
       canvas_ptr = GT.INSTANCE.gt_canvas_cairo_file_new(style.to_ptr(), 1, n_width, n_height,null);
   }
   
-  public void finalize() {
-    GT.INSTANCE.gt_canvas_delete(canvas_ptr);
+  protected void finalize() {
+    super.finalize();
   }
   
   public void to_file(String filename) throws GTerror {

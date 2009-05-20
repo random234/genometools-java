@@ -55,6 +55,7 @@ public abstract class FeatureIndex
   public void add_gff3file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_feature_index_add_gff3file(this.feat_index, filename, err.to_ptr());
+    System.err.println("New gff3file added");
     if (rval != 0) {
       throw new GTerror(err.get_err(), err.to_ptr());
     }

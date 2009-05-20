@@ -59,7 +59,7 @@ public class Diagram
   public Diagram(FeatureIndex feat_index, String seqid, Range ran, Style style) throws GTerror
   {
 
-    if (ran.start.longValue() < ran.end.longValue()) {
+    if (ran.start.longValue() > ran.end.longValue()) {
       throw new GTerror("range.start > range.end");
     }
     if (style.equals(Style.class)) {
@@ -100,7 +100,7 @@ public class Diagram
     GT.INSTANCE.gt_diagram_add_custom_track(diagram_ptr, ct);
   } */
 
-  public void finalize()
+  protected void finalize()
   {
     GT.INSTANCE.gt_diagram_delete(diagram_ptr);
   }

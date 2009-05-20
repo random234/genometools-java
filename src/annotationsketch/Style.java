@@ -178,7 +178,7 @@ public class Style
     return style_ptr;
   }
 
-  public void finalize()
+  protected void finalize()
   {
     GT.INSTANCE.gt_style_delete(style_ptr);
   }

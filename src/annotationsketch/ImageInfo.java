@@ -22,7 +22,7 @@ public class ImageInfo
     image_info_ptr = GT.INSTANCE.gt_image_info_new();
   }
   
-  public void finalize() {
+  protected void finalize() {
     GT.INSTANCE.gt_image_info_delete(image_info_ptr);
   }
   

@@ -11,7 +11,7 @@ import extended.FeatureNode;
 public class Block
 {
   private Pointer block_ptr;
-  private final char STRANDCHARS[] = { '+', '-', '.' };
+  private final char STRANDCHARS[] = { '+', '-', '.', '?' };
 
   public interface GT extends Library
   {
@@ -75,14 +75,13 @@ public class Block
   {
     switch (strand) {
     case '+':
-      break;
     case '-':
-      break;
     case '.':
+    case '?':
       break;
     default:
       throw new GTerror("Invalid Strand " + (char) strand
-          + " must be one of: [+ - .]");
+          + " must be one of: [+ - . ?]");
     }
     GT.INSTANCE.gt_block_set_strand(block_ptr, strand);
   }
@@ -115,7 +114,7 @@ public class Block
     return block_ptr;
   }
 
-  public void finalize()
+  protected void finalize()
   {
     GT.INSTANCE.gt_block_delete(block_ptr);
   }

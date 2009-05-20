@@ -26,8 +26,12 @@ public class Layout
     if(layout_ptr == null) { throw new GTerror(err.get_err(),err.to_ptr()); }
   }
   
-  protected void finalize() {
-    GT.INSTANCE.gt_layout_delete(layout_ptr);
+  protected void finalize() throws Throwable {
+	try {
+      GT.INSTANCE.gt_layout_delete(layout_ptr);
+	} finally {
+	  super.finalize();
+	}
   }
   
   public int get_height(){

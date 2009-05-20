@@ -18,10 +18,10 @@ public class Block
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
 
     Pointer gt_block_ref(Pointer gt_block);
-    Range gt_block_get_range(Pointer gt_block);
+    Range gt_block_get_range_ptr(Pointer gt_block);
     String gt_block_get_type(Pointer gt_block);
-    boolean gt_block_has_only_fullsize_element(Pointer gt_block);
-    Pointer gt_block_merge(Pointer gt_block, Pointer gt_block_sec);
+    boolean gt_block_has_only_one_fullsize_element(Pointer gt_block);
+    void gt_block_merge(Pointer gt_block, Pointer gt_block_sec);
     Pointer gt_block_clone(Pointer gt_block);
     void gt_block_set_strand(Pointer gt_block, int i);
     Pointer gt_block_get_top_level_feature(Pointer gt_block);
@@ -33,7 +33,7 @@ public class Block
   public Block(Pointer ptr) throws GTerror
   {
     if (ptr == null) {
-      throw new GTerror("Block Ptr wasn't initialized ");
+      throw new GTerror("block pointer must not be NULL");
     }
     block_ptr = GT.INSTANCE.gt_block_ref(ptr);
   }
@@ -41,7 +41,7 @@ public class Block
   public Range get_range()
   {
     Range r = new Range();
-    r = GT.INSTANCE.gt_block_get_range(this.block_ptr);
+    r = GT.INSTANCE.gt_block_get_range_ptr(this.block_ptr);
     return r;
   }
 
@@ -52,38 +52,38 @@ public class Block
 
   public Boolean has_only_one_fullsize_element()
   {
-    return GT.INSTANCE.gt_block_has_only_fullsize_element(this.block_ptr);
+    return GT.INSTANCE.gt_block_has_only_one_fullsize_element(this.block_ptr);
   }
 
-  public Block merge(Pointer block2_ptr) throws NullPointerException, GTerror
+  public void merge(Block block2)
   {
-    try { if(block2_ptr == null) { throw new NullPointerException("Block ptr wasn't initialized"); }
-    } catch (NullPointerException e) {
-      throw new GTerror("GTerror occured: ", e);
-    }
-    Block b = new Block(GT.INSTANCE.gt_block_merge(this.block_ptr, block2_ptr));
-    return b;
+    GT.INSTANCE.gt_block_merge(this.block_ptr, block2.to_ptr());	
   }
 
   public Block clone_block() throws GTerror
   {
-    Block b = new Block(GT.INSTANCE.gt_block_clone(block_ptr));
-    return b;
+    return new Block(GT.INSTANCE.gt_block_clone(block_ptr));
   }
 
   public void set_strand(char strand) throws GTerror
   {
     switch (strand) {
     case '+':
+      GT.INSTANCE.gt_block_set_strand(block_ptr, 0);
+      break;
     case '-':
+      GT.INSTANCE.gt_block_set_strand(block_ptr, 1);
+      break;
     case '.':
+      GT.INSTANCE.gt_block_set_strand(block_ptr, 2);
+      break;
     case '?':
+      GT.INSTANCE.gt_block_set_strand(block_ptr, 3);
       break;
     default:
       throw new GTerror("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
-    GT.INSTANCE.gt_block_set_strand(block_ptr, strand);
   }
 
   public char get_strand()
@@ -101,12 +101,9 @@ public class Block
     }
   }
 
-  public int get_size()
+  public long get_size()
   {
-    NativeLong tmp = new NativeLong();
-    tmp = GT.INSTANCE.gt_block_get_size(block_ptr);
-    long l_tmp = tmp.longValue();
-    return (int) l_tmp;
+    return GT.INSTANCE.gt_block_get_size(block_ptr).longValue();
   }
 
   public Pointer to_ptr()
@@ -114,8 +111,11 @@ public class Block
     return block_ptr;
   }
 
-  protected void finalize()
-  {
-    GT.INSTANCE.gt_block_delete(block_ptr);
+  protected void finalize() throws Throwable {
+    try {
+      GT.INSTANCE.gt_block_delete(block_ptr);
+    } finally {
+      super.finalize();
+    }
   }
 }

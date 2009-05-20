@@ -12,7 +12,7 @@ public class CanvasCairoFile extends CanvasCairo
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
-    Pointer gt_canvas_cairo_file_new(Pointer style ,int output_type, NativeLong width, NativeLong height, Pointer image_info);
+    Pointer gt_canvas_cairo_file_new(Pointer style, int output_type, NativeLong width, NativeLong height, Pointer image_info);
     int gt_canvas_cairo_file_to_file(Pointer canvas, String filename, Pointer err);
     void gt_canvas_delete(Pointer canvas);
   }
@@ -31,7 +31,7 @@ public class CanvasCairoFile extends CanvasCairo
   public CanvasCairoFile(Style style, int width, int height) {
     NativeLong n_width = new NativeLong(width);
     NativeLong n_height = new NativeLong(height);
-      canvas_ptr = GT.INSTANCE.gt_canvas_cairo_file_new(style.to_ptr(), 1, n_width, n_height,null);
+    canvas_ptr = GT.INSTANCE.gt_canvas_cairo_file_new(style.to_ptr(), 1, n_width, n_height,null);
   }
   
   protected void finalize() {
@@ -41,7 +41,7 @@ public class CanvasCairoFile extends CanvasCairo
   public void to_file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_canvas_cairo_file_to_file(canvas_ptr, filename, err.to_ptr());
-    if (rval != 0) { throw new GTerror(err.get_err() ,err.to_ptr()); } 
+    if (rval != 0) { throw new GTerror(err.get_err(), err.to_ptr()); } 
 }
  
 }

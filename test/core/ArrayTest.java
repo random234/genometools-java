@@ -8,10 +8,11 @@ import static org.junit.Assert.*;
 
 public class ArrayTest
 {
-  FeatureNode fn;
+  static FeatureNode fn;
   
-  @Before
-  public void init() throws GTerror {
+  @BeforeClass
+  public static void init() throws GTerror {
+    Allocators.init();
     fn = new FeatureNode("test","type",1000,8000,".");
   }
   
@@ -44,6 +45,7 @@ public class ArrayTest
     arr.add(fn);
     assertEquals(fn.to_ptr(), arr.get(0));
   }
+  
   @Test
   public void test_ArrayPointer() {
     Array arr = new Array(Pointer.SIZE);

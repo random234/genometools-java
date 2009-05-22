@@ -22,11 +22,13 @@ public class Layout
   public Layout(Diagram diagram, int width, Style style) throws GTerror {
     GTerror err = new GTerror();
     NativeLong w_long = new NativeLong(width);
-    layout_ptr = GT.INSTANCE.gt_layout_new(diagram.to_ptr(), w_long, style.to_ptr(), err.to_ptr());
+    synchronized (this) {
+      layout_ptr = GT.INSTANCE.gt_layout_new(diagram.to_ptr(), w_long, style.to_ptr(), err.to_ptr());
+    }
     if(layout_ptr == null) { throw new GTerror(err.get_err(),err.to_ptr()); }
   }
   
-  protected void finalize() throws Throwable {
+  protected synchronized void finalize() throws Throwable {
     try {
       GT.INSTANCE.gt_layout_delete(layout_ptr);
     } finally {
@@ -38,7 +40,7 @@ public class Layout
     return GT.INSTANCE.gt_layout_get_height(layout_ptr).longValue();
   }
   
-  public void sketch(Canvas canvas) throws GTerror {
+  public synchronized void sketch(Canvas canvas) throws GTerror {
     GTerror err = new GTerror();
     int had_err = GT.INSTANCE.gt_layout_sketch(layout_ptr, canvas.to_ptr(), err.to_ptr());
     if(had_err < 0) {

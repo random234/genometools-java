@@ -44,6 +44,7 @@ public class FeatureNode extends GenomeNode
 
   public FeatureNode(String seqid, String type, int start, int end, String stra) throws GTerror
   {
+    Pointer newfn;
     char strand = stra.charAt(0);
     switch (strand) {
     case '+':
@@ -65,12 +66,14 @@ public class FeatureNode extends GenomeNode
     Str s = new Str(seqid);
     NativeLong stmp = new NativeLong(start);
     NativeLong etmp = new NativeLong(end);
-    Pointer newfn = GT.INSTANCE.gt_feature_node_new(s.to_ptr(), type, stmp,
-        etmp, strand);
+    synchronized (this) {
+      newfn = GT.INSTANCE.gt_feature_node_new(s.to_ptr(), type, stmp,
+          etmp, strand);
+    }
     this.genome_node_ptr = newfn;
   }
 
-  public void add_child(FeatureNode child)
+  public synchronized void add_child(FeatureNode child)
   {
     GT.INSTANCE.gt_feature_node_add_child(this.genome_node_ptr, child.to_ptr());
   }

@@ -5,6 +5,12 @@ import static org.junit.Assert.*;
 
 public class StrTest
 {
+  
+  @BeforeClass
+  public static void init() {
+    Allocators.init();   
+  }
+  
   @Test
   public void test_to_ptr()
   {

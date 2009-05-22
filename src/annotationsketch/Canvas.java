@@ -20,7 +20,7 @@ public abstract class Canvas
   public Pointer to_ptr() {
     return canvas_ptr;
   }
-  protected void finalize() {
+  protected synchronized void finalize() {
 	  GT.INSTANCE.gt_canvas_delete(canvas_ptr);
   }
   

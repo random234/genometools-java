@@ -35,7 +35,9 @@ public class Block
     if (ptr == null) {
       throw new GTerror("block pointer must not be NULL");
     }
-    block_ptr = GT.INSTANCE.gt_block_ref(ptr);
+    synchronized(this) {
+      block_ptr = GT.INSTANCE.gt_block_ref(ptr);
+    }
   }
 
   public Range get_range()
@@ -55,12 +57,12 @@ public class Block
     return GT.INSTANCE.gt_block_has_only_one_fullsize_element(this.block_ptr);
   }
 
-  public void merge(Block block2)
+  public synchronized void merge(Block block2)
   {
     GT.INSTANCE.gt_block_merge(this.block_ptr, block2.to_ptr());	
   }
 
-  public Block clone_block() throws GTerror
+  public synchronized Block clone_block() throws GTerror
   {
     return new Block(GT.INSTANCE.gt_block_clone(block_ptr));
   }
@@ -91,7 +93,7 @@ public class Block
     return STRANDCHARS[GT.INSTANCE.gt_block_get_strand(block_ptr)];
   }
 
-  public FeatureNode get_top_level_feature()
+  public synchronized FeatureNode get_top_level_feature()
   {
     Pointer f = GT.INSTANCE.gt_block_get_top_level_feature(block_ptr);
     if (f != null) {
@@ -111,9 +113,9 @@ public class Block
     return block_ptr;
   }
 
-  protected void finalize() throws Throwable {
+  protected synchronized void finalize() throws Throwable {
     try {
-      GT.INSTANCE.gt_block_delete(block_ptr);
+        GT.INSTANCE.gt_block_delete(block_ptr);
     } finally {
       super.finalize();
     }

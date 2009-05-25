@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
+import core.Allocators;
 import core.GTerror;
 import core.Range;
 import extended.FeatureNode;
@@ -16,6 +17,7 @@ public class FeatureIndexTest
   
   @BeforeClass
   public static void init() throws GTerror {
+    Allocators.init();
     fi =  new FeatureIndexMemory();
     feats = new ArrayList<FeatureNode>();
     String seqid = "foo";

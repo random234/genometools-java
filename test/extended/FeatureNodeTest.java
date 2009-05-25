@@ -1,16 +1,19 @@
 package extended;
 import org.junit.*;
 
+import core.Allocators;
 import core.GTerror;
 import core.Range;
 import static org.junit.Assert.*;
 
 public class FeatureNodeTest
 {
-  FeatureNode fn, fn2;
+  static FeatureNode fn;
+  static FeatureNode fn2;
   
-  @Before
-  public void init() throws GTerror {
+  @BeforeClass
+  public static void init() throws GTerror {
+    Allocators.init();
     fn = new FeatureNode("test", "type", 1000, 8000, ".");
     fn2 = new FeatureNode("test", "type2", 600, 700, "+");
     fn.add_attribute("test", "testval");

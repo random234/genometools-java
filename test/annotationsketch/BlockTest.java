@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
+import core.Allocators;
 import core.GTerror;
 import core.Range;
 import extended.FeatureNode;
@@ -23,6 +24,7 @@ public class BlockTest
   
   @BeforeClass
   public static void init() throws GTerror {
+    Allocators.init();
     s = new Style();
     s.set_bool("exon", "collapse_to_parent", true);
     s.set_bool("intron", "collapse_to_parent", true);

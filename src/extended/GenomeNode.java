@@ -24,12 +24,14 @@ abstract class GenomeNode
   
   public GenomeNode(Pointer node_ptr) 
   {
-    genome_node_ptr = GT.INSTANCE.gt_genome_node_ref(node_ptr);
+    synchronized(this) {
+      genome_node_ptr = GT.INSTANCE.gt_genome_node_ref(node_ptr);
+    }
   }
   
-  protected void finalize()
+  protected synchronized void finalize()
   {
-    GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
+    //GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
   }
   
   public Range get_range()

@@ -34,11 +34,11 @@ public abstract class FeatureIndex
     Boolean gt_feature_index_has_seqid(Pointer fi, String seqid);
   }
 
-  protected void finalize() {
+  protected synchronized void finalize() throws Throwable {
     GT.INSTANCE.gt_feature_index_delete(feat_index);
   }
   
-  public ArrayList<FeatureNode> get_features_for_seqid(String seqid)
+  public synchronized ArrayList<FeatureNode> get_features_for_seqid(String seqid)
   {
     Pointer rval = GT.INSTANCE.gt_feature_index_get_features_for_seqid(
         this.feat_index, seqid);
@@ -54,13 +54,13 @@ public abstract class FeatureIndex
     return null;
   }
   
-  public void add_feature_node(FeatureNode fn) throws GTerror {
+  public synchronized void add_feature_node(FeatureNode fn) throws GTerror {
     if (fn.to_ptr() == null) 
       throw new GTerror("feature node must not be NULL");
     GT.INSTANCE.gt_feature_index_add_feature_node(this.feat_index, fn.to_ptr());
   }
   
-  public void add_gff3file(String filename) throws GTerror {
+  public synchronized void add_gff3file(String filename) throws GTerror {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_feature_index_add_gff3file(this.feat_index, filename, err.to_ptr());
     if (rval != 0) {

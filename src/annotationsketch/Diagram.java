@@ -114,7 +114,6 @@ public class Diagram
   
   protected synchronized void finalize() throws Throwable {
     try {
-      System.out.println("finalizing" + diagram_ptr);
       GT.INSTANCE.gt_diagram_delete(diagram_ptr);
     } finally {
 	    super.finalize();

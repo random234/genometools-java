@@ -5,7 +5,7 @@ import core.Range;
 
 abstract class GenomeNode
 {
-  protected Pointer genome_node_ptr;
+  protected Pointer  genome_node_ptr;
 
   public interface GT extends Library
   {

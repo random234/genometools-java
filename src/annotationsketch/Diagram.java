@@ -20,7 +20,6 @@ public class Diagram
   protected Pointer diagram_ptr;
   // these references are kept to avoid garbage collection 
   // of the track selector funcs as long as this object exists
-  @SuppressWarnings("unused")
   private TRACKSELECTOR tsf;
   @SuppressWarnings("unused")
   private TrackSelector ts;
@@ -41,6 +40,7 @@ public class Diagram
     interface TRACKSELECTOR extends Callback
     {
       void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror;
+      void finalize();
     }
   }
 
@@ -89,6 +89,7 @@ public class Diagram
     TRACKSELECTOR tsf = new TRACKSELECTOR()
     {
       final Diagram dia = d;
+      Boolean finalized;
       
       public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror
       {
@@ -101,9 +102,12 @@ public class Diagram
           throw new GTerror("Track selector function must return a string");
         }
       }
-      protected void finalize()
+      public void finalize()
       {
-        dia.reset_track_selector_func();
+    	if (!finalized) {
+          dia.reset_track_selector_func();
+          finalized = true;
+    	}
       }
     };
     this.tsf = tsf;
@@ -117,6 +121,7 @@ public class Diagram
   
   protected void finalize() throws Throwable {
     try {
+      this.tsf.finalize();
       GT.INSTANCE.gt_diagram_delete(diagram_ptr);
     } finally {
 	  super.finalize();

@@ -29,7 +29,7 @@ private TRACKSELECTOR tsf;
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
 
-    Pointer gt_diagram_new(Pointer feat_index, String seqid, Pointer gt_range,
+    Pointer gt_diagram_new(Pointer feat_index, String seqid, Range gt_range,
         Pointer gt_style, Pointer gt_err);
     Pointer gt_diagram_new_from_array(Pointer gt_array, Range gt_range,
         Pointer gt_style);
@@ -76,8 +76,7 @@ private TRACKSELECTOR tsf;
     }
     GTerror err = new GTerror();
     synchronized (this) {
-      dia = GT.INSTANCE.gt_diagram_new(feat_index.to_ptr(), seqid, ran
-          .getPointer(), style.to_ptr(), err.to_ptr());
+      dia = GT.INSTANCE.gt_diagram_new(feat_index.to_ptr(), seqid, ran, style.to_ptr(), err.to_ptr());
     }
     if (dia == null) {
       throw new GTerror(err.get_err(),err.to_ptr());

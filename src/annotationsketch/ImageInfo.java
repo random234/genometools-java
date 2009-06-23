@@ -36,16 +36,13 @@ public class ImageInfo
     NativeLong tmp = GT.INSTANCE.gt_image_info_num_of_rec_maps(image_info_ptr);
     int i_tmp = (int)tmp.longValue();
     return i_tmp;
-  }
-  
+  }  
   
   public RecMap get_rec_map(int i) {
     NativeLong tmp = new NativeLong(i);
     RecMap rm = new RecMap(GT.INSTANCE.gt_image_info_get_rec_map(image_info_ptr, tmp));
     return rm;
-  }
-  
-  
+  }  
   
   public Pointer to_ptr() {
     return image_info_ptr;

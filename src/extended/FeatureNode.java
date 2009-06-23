@@ -1,9 +1,12 @@
 package extended;
 
+import java.util.ArrayList;
+
 import com.sun.jna.*;
 
 import core.GTerror;
 import core.Str;
+import core.StrArray;
 import extended.GenomeNode;
 
 
@@ -33,13 +36,16 @@ public class FeatureNode extends GenomeNode
     String gt_feature_node_get_attribute(Pointer feature_node, String name);
     void gt_feature_node_add_attribute(Pointer feature_node, String tag,
         String value);
-    void gt_feature_node_foreach_attribute(Pointer feature_node,
-        Pointer attributeiterfunc, Pointer data);
+    Pointer gt_feature_node_get_attribute_list(Pointer feature_node);
+
   }
   
   public FeatureNode(Pointer node_ptr) 
   {
     super(node_ptr);
+  }
+  public FeatureNode(FeatureNode node_ptr) {
+	  super(node_ptr.to_ptr());
   }
 
   public FeatureNode(String seqid, String type, int start, int end, String stra) throws GTerror
@@ -168,4 +174,13 @@ public class FeatureNode extends GenomeNode
       GT.INSTANCE.gt_feature_node_add_attribute(this.genome_node_ptr, tag, value);
     }
   }
+  public ArrayList<String> get_attribute_list() {
+	StrArray str_arr = new StrArray(GT.INSTANCE.gt_feature_node_get_attribute_list(genome_node_ptr));
+	ArrayList<String> arr = new ArrayList<String>(); 
+	for(int i =0; i < str_arr.length(); i++) {
+		arr.add(str_arr.get(i));
+	}
+	return arr;
+  }
+  
 }

@@ -2,21 +2,22 @@ package extended;
 
 import com.sun.jna.*;
 import core.Range;
+import core.Str;
 
 abstract class GenomeNode
 {
-  protected Pointer  genome_node_ptr;
+  protected Pointer genome_node_ptr;
 
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
-
     int gt_genome_node_accept(Pointer gn, Pointer gv, Pointer err);
     Pointer gt_genome_node_ref(Pointer gn);
     NativeLong gt_genome_node_get_start(Pointer gn);
     NativeLong gt_genome_node_get_end(Pointer gn);
     String gt_genome_node_get_filename(Pointer gn);
     void gt_genome_node_delete(Pointer gn);
+    void gt_genome_node_change_seqid(Pointer genome_node, Pointer GtStr);
   }
 
   public GenomeNode() {
@@ -31,7 +32,7 @@ abstract class GenomeNode
   
   protected synchronized void finalize()
   {
-    //GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
+    GT.INSTANCE.gt_genome_node_delete(this.genome_node_ptr);
   }
   
   public Range get_range()
@@ -69,6 +70,11 @@ abstract class GenomeNode
       return false;
     GenomeNode gn = (GenomeNode) obj;
     return (this.to_ptr().equals(gn.to_ptr()));
+  }
+  
+  public void change_seqid(String seqid) {
+    Str id = new Str(seqid);
+    GT.INSTANCE.gt_genome_node_change_seqid(genome_node_ptr, id.to_ptr());
   }
   
   public Pointer to_ptr() {

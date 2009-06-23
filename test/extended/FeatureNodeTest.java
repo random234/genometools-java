@@ -104,7 +104,7 @@ public class FeatureNodeTest
     FeatureNode falseclone = new FeatureNode("test", "type", 1000, 8000, ".");
     assertTrue(fn.equals(fn));
     assertTrue(fn2.equals(fn2));
-    FeatureNode clone = new FeatureNode(fn.to_ptr());
+    FeatureNode clone = new FeatureNode(fn);
     assertTrue(fn.equals(clone));
     assertTrue(clone.equals(fn));
     assertFalse(fn.equals(falseclone));

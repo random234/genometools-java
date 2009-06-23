@@ -14,13 +14,14 @@ import com.sun.jna.*;
       Pointer gt_feature_node_iterator_new_direct(Pointer gn);
     }
     
-    public Pointer next()
+    public FeatureNode next()
     {
+    	
       Pointer ret = GT.INSTANCE.gt_feature_node_iterator_next(feat_ptr);
       if (ret != null) {
-        return ret;
+        return new FeatureNode(ret);
       }
-      return ret;
+      return null;
     }
     protected void finalize()
     {

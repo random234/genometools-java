@@ -20,8 +20,6 @@ public abstract class FeatureIndex
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
-
-    Pointer gt_feature_index_memory_new();
     void gt_feature_index_delete(Pointer fi);
     void gt_feature_index_add_feature_node(Pointer feature_index,
         Pointer feature_node);

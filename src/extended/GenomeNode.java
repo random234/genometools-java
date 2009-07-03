@@ -7,7 +7,8 @@ import core.Str;
 abstract class GenomeNode
 {
   protected Pointer genome_node_ptr;
-
+  protected int genome_node_addr;
+  
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);

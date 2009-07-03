@@ -9,7 +9,6 @@ import core.Str;
 import core.StrArray;
 import extended.GenomeNode;
 
-
 public class FeatureNode extends GenomeNode
 {
   private char[] STRANDCHARS = { '+','-','.','?' };
@@ -37,7 +36,6 @@ public class FeatureNode extends GenomeNode
     void gt_feature_node_add_attribute(Pointer feature_node, String tag,
         String value);
     Pointer gt_feature_node_get_attribute_list(Pointer feature_node);
-
   }
   
   public FeatureNode(Pointer node_ptr) 
@@ -76,7 +74,7 @@ public class FeatureNode extends GenomeNode
       newfn = GT.INSTANCE.gt_feature_node_new(s.to_ptr(), type, stmp,
           etmp, strand);
     }
-    this.genome_node_ptr = newfn;
+    this.genome_node_ptr = new TransparentPointer(newfn);
   }
 
   public synchronized void add_child(FeatureNode child)

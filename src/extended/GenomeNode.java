@@ -1,17 +1,18 @@
 package extended;
 
 import com.sun.jna.*;
+
 import core.Range;
 import core.Str;
 
 abstract class GenomeNode
 {
-  protected Pointer genome_node_ptr;
-  protected int genome_node_addr;
+  protected TransparentPointer genome_node_ptr;
   
   public interface GT extends Library
   {
     GT INSTANCE = (GT) Native.loadLibrary("genometools", GT.class);
+    
     int gt_genome_node_accept(Pointer gn, Pointer gv, Pointer err);
     Pointer gt_genome_node_ref(Pointer gn);
     NativeLong gt_genome_node_get_start(Pointer gn);
@@ -27,7 +28,7 @@ abstract class GenomeNode
   public GenomeNode(Pointer node_ptr) 
   {
     synchronized(this) {
-      genome_node_ptr = GT.INSTANCE.gt_genome_node_ref(node_ptr);
+      genome_node_ptr = new TransparentPointer(GT.INSTANCE.gt_genome_node_ref(node_ptr));
     }
   }
   
@@ -81,4 +82,8 @@ abstract class GenomeNode
   public Pointer to_ptr() {
     return genome_node_ptr;
   }  
+  
+  public long get_address() {
+    return genome_node_ptr.getPeer();
+  }
 }

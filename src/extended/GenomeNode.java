@@ -46,7 +46,7 @@ abstract class GenomeNode
     return ran;
   }
   
-  String get_filename()
+  public String get_filename()
   {
     return GT.INSTANCE.gt_genome_node_get_filename(this.genome_node_ptr);
   }

@@ -23,10 +23,9 @@ public class FeatureIndexMemory extends FeatureIndex {
       feat_index = GT.INSTANCE.gt_feature_index_memory_new();
     }
   }
-  public FeatureNode get_node_by_ptr(String id) throws GTerror {
+  public FeatureNode get_node_by_ptr(long id) throws GTerror {
     GTerror err = new GTerror();
-    int int_tmp = Integer.parseInt(id);
-    NativeLong id_long = new NativeLong(int_tmp);
+    NativeLong id_long = new NativeLong(id);
     System.out.println("FeatureIndexDebugBefore");
     Pointer tmp = GT.INSTANCE.gt_feature_index_memory_get_node_by_ptr(this.feat_index, id_long, err.to_ptr());
     FeatureNode feat;

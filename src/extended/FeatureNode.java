@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.sun.jna.*;
 
-import core.GTerror;
+import core.GTerrorJava;
 import core.Str;
 import core.StrArray;
 import extended.GenomeNode;
@@ -46,7 +46,7 @@ public class FeatureNode extends GenomeNode
 	  super(node_ptr.to_ptr());
   }
 
-  public FeatureNode(String seqid, String type, int start, int end, String stra) throws GTerror
+  public FeatureNode(String seqid, String type, int start, int end, String stra) throws GTerrorJava
   {
     Pointer newfn;
     char strand = stra.charAt(0);
@@ -64,7 +64,7 @@ public class FeatureNode extends GenomeNode
       strand = 3;
       break;
     default:
-      throw new GTerror("Invalid Strand " + (char) strand
+      throw new GTerrorJava("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
     Str s = new Str(seqid);
@@ -131,7 +131,7 @@ public class FeatureNode extends GenomeNode
     return STRANDCHARS[GT.INSTANCE.gt_feature_node_get_strand(this.genome_node_ptr)];
   }
 
-  public void set_strand(String stra) throws GTerror
+  public void set_strand(String stra) throws GTerrorJava
   {
     char strand = stra.charAt(0);
     switch (strand) {
@@ -143,7 +143,7 @@ public class FeatureNode extends GenomeNode
       break;
     case '?': strand = 3;
     default:
-      throw new GTerror("Invalid Strand " + (char) strand
+      throw new GTerrorJava("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
     GT.INSTANCE.gt_feature_node_set_strand(genome_node_ptr, strand);
@@ -164,10 +164,10 @@ public class FeatureNode extends GenomeNode
     return GT.INSTANCE.gt_feature_node_get_attribute(this.genome_node_ptr, name);
   }
 
-  public void add_attribute(String tag, String value) throws GTerror
+  public void add_attribute(String tag, String value) throws GTerrorJava
   {
     if (tag.toString() == "" || value.toString() == "") {
-      throw new GTerror("attribute keys or values must not be empty");
+      throw new GTerrorJava("attribute keys or values must not be empty");
     } else {
       GT.INSTANCE.gt_feature_node_add_attribute(this.genome_node_ptr, tag, value);
     }

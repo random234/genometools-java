@@ -6,6 +6,7 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 
 import core.GTerror;
+import core.GTerrorJava;
 
 public class Layout
 {
@@ -19,13 +20,13 @@ public class Layout
     void gt_layout_delete(Pointer gt_lay_ptr);
   }
   
-  public Layout(Diagram diagram, int width, Style style) throws GTerror {
+  public Layout(Diagram diagram, int width, Style style) throws GTerrorJava {
     GTerror err = new GTerror();
     NativeLong w_long = new NativeLong(width);
     synchronized (this) {
       layout_ptr = GT.INSTANCE.gt_layout_new(diagram.to_ptr(), w_long, style.to_ptr(), err.to_ptr());
     }
-    if(layout_ptr == null) { throw new GTerror(err.get_err(),err.to_ptr()); }
+    if(layout_ptr == null) { throw new GTerrorJava(err.get_err()); }
   }
   
   protected synchronized void finalize() throws Throwable {
@@ -40,11 +41,11 @@ public class Layout
     return GT.INSTANCE.gt_layout_get_height(layout_ptr).longValue();
   }
   
-  public synchronized void sketch(Canvas canvas) throws GTerror {
+  public synchronized void sketch(Canvas canvas) throws GTerrorJava {
     GTerror err = new GTerror();
     int had_err = GT.INSTANCE.gt_layout_sketch(layout_ptr, canvas.to_ptr(), err.to_ptr());
     if(had_err < 0) {
-      throw new GTerror(err.get_err(), err.to_ptr());  
+      throw new GTerrorJava(err.get_err());  
     }
   }
   

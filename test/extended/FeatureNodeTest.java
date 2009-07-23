@@ -2,7 +2,7 @@ package extended;
 import org.junit.*;
 
 import core.Allocators;
-import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 import static org.junit.Assert.*;
 
@@ -12,7 +12,7 @@ public class FeatureNodeTest
   static FeatureNode fn2;
   
   @BeforeClass
-  public static void init() throws GTerror {
+  public static void init() throws GTerrorJava {
     Allocators.init();
     fn = new FeatureNode("test", "type", 1000, 8000, ".");
     fn2 = new FeatureNode("test", "type2", 600, 700, "+");
@@ -53,7 +53,7 @@ public class FeatureNodeTest
   public void test_set_strand() {
     try {
       fn.set_strand("+");
-    } catch (GTerror e) {     
+    } catch (GTerrorJava e) {     
       e.printStackTrace();
     }
     assertTrue(fn.get_strand() == '+');
@@ -100,7 +100,7 @@ public class FeatureNodeTest
   }
   
   @Test
-  public void test_equals() throws GTerror {
+  public void test_equals() throws GTerrorJava {
     FeatureNode falseclone = new FeatureNode("test", "type", 1000, 8000, ".");
     assertTrue(fn.equals(fn));
     assertTrue(fn2.equals(fn2));

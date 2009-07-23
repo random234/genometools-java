@@ -11,7 +11,7 @@ public class ArrayTest
   static FeatureNode fn;
   
   @BeforeClass
-  public static void init() throws GTerror {
+  public static void init() throws GTerrorJava {
     Allocators.init();
     fn = new FeatureNode("test","type",1000,8000,".");
   }

@@ -6,6 +6,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.DoubleByReference;
 import com.sun.jna.ptr.IntByReference;
 import core.GTerror;
+import core.GTerrorJava;
 import core.Str;
 
 public class Style
@@ -42,37 +43,37 @@ public class Style
     void gt_style_delete(Pointer style);
   }
 
-  public Style() throws GTerror
+  public Style() throws GTerrorJava
   {
     GTerror err = new GTerror();
     style_ptr = GT.INSTANCE.gt_style_new(err.to_ptr());
     if (style_ptr == null) {
-      throw new GTerror(err.get_err(),err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     }
   }
 
-  public void load_file(String filename) throws GTerror
+  public void load_file(String filename) throws GTerrorJava
   {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE
         .gt_style_load_file(style_ptr, filename, err.to_ptr());
     if (rval != 0) {
-      throw new GTerror(err.get_err(),err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     }
   }
 
-  public void load_str(String str) throws GTerror
+  public void load_str(String str) throws GTerrorJava
   {
     GTerror err = new GTerror();
     Str str_obj = new Str(str);
     int rval = GT.INSTANCE.gt_style_load_str(style_ptr, str_obj.to_ptr(), err
         .to_ptr());
     if (rval != 0) {
-      throw new GTerror(err.get_err(),err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     }
   }
 
-  public Str to_str() throws GTerror
+  public Str to_str() throws GTerrorJava
   {
     GTerror err = new GTerror();
     Str str_obj = new Str("");
@@ -81,12 +82,12 @@ public class Style
     if (rval == 0) {
       return str_obj;
     } else {
-      throw new GTerror(err.get_err(), err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     }
 
   }
 
-  public Style clone_style() throws GTerror
+  public Style clone_style() throws GTerrorJava
   {
     Style sty = new Style();
     Str str_obj = sty.to_str();
@@ -154,14 +155,14 @@ public class Style
     GT.INSTANCE.gt_style_set_num(style_ptr, sect, key, d_num);
   }
 
-  public boolean get_bool(String sect, String key) throws GTerror {
+  public boolean get_bool(String sect, String key) throws GTerrorJava {
     Pointer feat_node = null;
     int bool = 2;
     IntByReference i_bool = new IntByReference(bool);
     boolean rval = GT.INSTANCE.gt_style_get_bool(style_ptr, sect, key, i_bool, feat_node);
     if(rval == true) {
-      if(bool == 1) { return true; } else { throw new GTerror("Section doesn't exist"); }  
-    } else { throw new GTerror("Section doesn't exist"); }  
+      if(bool == 1) { return true; } else { throw new GTerrorJava("Section doesn't exist"); }  
+    } else { throw new GTerrorJava("Section doesn't exist"); }  
   }
   
   public void set_bool(String sect, String key, boolean value) {

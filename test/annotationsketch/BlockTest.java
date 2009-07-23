@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.*;
 
 import core.Allocators;
-import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 import extended.FeatureNode;
 import annotationsketch.TrackSelector;
@@ -23,7 +23,7 @@ public class BlockTest
   static Layout l;
   
   @BeforeClass
-  public static void init() throws GTerror {
+  public static void init() throws GTerrorJava {
     Allocators.init();
     s = new Style();
     s.set_bool("exon", "collapse_to_parent", true);
@@ -92,7 +92,7 @@ public class BlockTest
   }
 
   @Test
-  public void test_clone_block() throws GTerror {
+  public void test_clone_block() throws GTerrorJava {
     Block b = blist.get(0).clone_block();
     assertTrue(blist.get(0).get_size() == b.get_size());
     b = blist.get(1).clone_block();
@@ -100,7 +100,7 @@ public class BlockTest
   }
   
   @Test
-  public void test_merge() throws GTerror {
+  public void test_merge() throws GTerrorJava {
     Block b = blist.get(0).clone_block();
     assertTrue(blist.get(0).get_size() == 6);
     b.merge(blist.get(0));
@@ -114,7 +114,7 @@ public class BlockTest
   }
   
   @Test
-  public void test_set_strand() throws GTerror {
+  public void test_set_strand() throws GTerrorJava {
     Block b;
     b = blist.get(0).clone_block();
     assertTrue(b.get_strand() == '+');
@@ -126,8 +126,8 @@ public class BlockTest
     assertTrue(b.get_strand() == '.');
   }
   
-  @Test(expected=GTerror.class)
-  public void test_set_strand_fail() throws GTerror {
+  @Test(expected=GTerrorJava.class)
+  public void test_set_strand_fail() throws GTerrorJava {
     Block b = blist.get(0).clone_block();
     b.set_strand('X');
   }

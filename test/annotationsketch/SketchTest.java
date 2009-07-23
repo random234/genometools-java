@@ -7,7 +7,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import core.Allocators;
-import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 
 import extended.FeatureNode;
@@ -18,7 +18,7 @@ public class SketchTest
   String tmpDir = System.getProperty("java.io.tmpdir");
 
   @BeforeClass
-  public static void init() throws GTerror {
+  public static void init() throws GTerrorJava {
     Allocators.init();
     // construct a gene on the forward strand with two exons
     String seqid = "chromosome21";
@@ -45,7 +45,7 @@ public class SketchTest
   }
 
   @Test
-  public void test_sketch() throws GTerror {
+  public void test_sketch() throws GTerrorJava {
     File f;
     Style sty = new Style();
     Range rng = new Range();
@@ -76,7 +76,7 @@ public class SketchTest
   }
 
   @Test
-  public void test_multi_sketch() throws GTerror {
+  public void test_multi_sketch() throws GTerrorJava {
 
     ArrayList<Thread> threads = new ArrayList<Thread>();
     
@@ -112,8 +112,8 @@ public class SketchTest
           assertTrue(f.length() > 100);
           assertTrue(f.delete());
           assertFalse(f.exists());
-        } catch(GTerror e) {
-          throw new Error(e.get_err());
+        } catch(GTerrorJava e) {
+          throw new Error();
         }
       }
     }
@@ -133,7 +133,7 @@ public class SketchTest
   }  
   
   @Test
-  public void test_multi_sketch_serial() throws GTerror {
+  public void test_multi_sketch_serial() throws GTerrorJava {
         File f;
         Style sty = new Style();
         Range rng = new Range();

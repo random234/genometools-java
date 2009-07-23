@@ -4,7 +4,7 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
-import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 import extended.FeatureNode;
 
@@ -30,10 +30,10 @@ public class Block
     void gt_block_delete(Pointer gt_block);
   }
 
-  public Block(Pointer ptr) throws GTerror
+  public Block(Pointer ptr) throws GTerrorJava
   {
     if (ptr == null) {
-      throw new GTerror("block pointer must not be NULL");
+      throw new GTerrorJava("block pointer must not be NULL");
     }
     synchronized(this) {
       block_ptr = GT.INSTANCE.gt_block_ref(ptr);
@@ -62,12 +62,12 @@ public class Block
     GT.INSTANCE.gt_block_merge(this.block_ptr, block2.to_ptr());	
   }
 
-  public synchronized Block clone_block() throws GTerror
+  public synchronized Block clone_block() throws GTerrorJava
   {
     return new Block(GT.INSTANCE.gt_block_clone(block_ptr));
   }
 
-  public void set_strand(char strand) throws GTerror
+  public void set_strand(char strand) throws GTerrorJava
   {
     switch (strand) {
     case '+':
@@ -83,7 +83,7 @@ public class Block
       GT.INSTANCE.gt_block_set_strand(block_ptr, 3);
       break;
     default:
-      throw new GTerror("Invalid Strand " + (char) strand
+      throw new GTerrorJava("Invalid Strand " + (char) strand
           + " must be one of: [+ - . ?]");
     }
   }

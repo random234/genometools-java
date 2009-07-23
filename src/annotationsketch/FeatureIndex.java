@@ -8,6 +8,7 @@ import com.sun.jna.Pointer;
 
 import core.GTerror;
 import core.Array;
+import core.GTerrorJava;
 import core.Range;
 import core.StrArray;
 import extended.FeatureNode;
@@ -52,17 +53,17 @@ public abstract class FeatureIndex
     return null;
   }
   
-  public synchronized void add_feature_node(FeatureNode fn) throws GTerror {
+  public synchronized void add_feature_node(FeatureNode fn) throws GTerrorJava {
     if (fn.to_ptr() == null) 
-      throw new GTerror("feature node must not be NULL");
+      throw new GTerrorJava("feature node must not be NULL");
     GT.INSTANCE.gt_feature_index_add_feature_node(this.feat_index, fn.to_ptr());
   }
   
-  public synchronized void add_gff3file(String filename) throws GTerror {
+  public synchronized void add_gff3file(String filename) throws GTerrorJava {
     GTerror err = new GTerror();
     int rval = GT.INSTANCE.gt_feature_index_add_gff3file(this.feat_index, filename, err.to_ptr());
     if (rval != 0) {
-      throw new GTerror(err.get_err(), err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     }
   }
   
@@ -79,9 +80,9 @@ public abstract class FeatureIndex
     return results;
   }
   
-  public Range get_range_for_seqid(String seqid) throws GTerror {
+  public Range get_range_for_seqid(String seqid) throws GTerrorJava {
     if(GT.INSTANCE.gt_feature_index_has_seqid(this.feat_index, seqid) == false) {
-      throw new GTerror("FeatureIndex does not contain seqid");
+      throw new GTerrorJava("FeatureIndex does not contain seqid");
     }
     Range ran = new Range();
     GT.INSTANCE.gt_feature_index_get_range_for_seqid(this.feat_index, ran, seqid);

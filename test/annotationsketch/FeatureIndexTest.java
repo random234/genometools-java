@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.junit.*;
 
 import core.Allocators;
-import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 import extended.FeatureNode;
 import static org.junit.Assert.*;
@@ -16,7 +16,7 @@ public class FeatureIndexTest
   static ArrayList<FeatureNode> feats;
   
   @BeforeClass
-  public static void init() throws GTerror {
+  public static void init() throws GTerrorJava {
     Allocators.init();
     fi =  new FeatureIndexMemory();
     feats = new ArrayList<FeatureNode>();
@@ -52,7 +52,7 @@ public class FeatureIndexTest
   }
   
   @Test
-  public void test_get_range_for_seqid() throws GTerror {
+  public void test_get_range_for_seqid() throws GTerrorJava {
     Range r = new Range();
     r = fi.get_range_for_seqid("foo");
     assertTrue(r.get_start() == 100);

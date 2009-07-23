@@ -11,6 +11,7 @@ import com.sun.jna.Callback;
 
 import core.Array;
 import core.GTerror;
+import core.GTerrorJava;
 import core.Range;
 import core.Str;
 import extended.FeatureNode;
@@ -40,15 +41,15 @@ private TRACKSELECTOR tsf;
 
     interface TRACKSELECTOR extends Callback
     {
-      void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror;
+      void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerrorJava;
     }
   }
 
-  public Diagram(AbstractList<FeatureNode> feats, Range rng, Style sty) throws GTerror
+  public Diagram(AbstractList<FeatureNode> feats, Range rng, Style sty) throws GTerrorJava
   {
     Pointer dia;
     if (rng.get_start() > rng.get_end()) {
-      throw new GTerror("range.start > range.end");
+      throw new GTerrorJava("range.start > range.end");
     }
     Array gtarr = new Array(Pointer.SIZE);
     for (int i = 0; i < feats.size(); i++) {
@@ -59,27 +60,27 @@ private TRACKSELECTOR tsf;
           sty.to_ptr());
     }
     if (dia == null) {
-      throw new GTerror("diagram pointer was NULL");
+      throw new GTerrorJava("Diagram pointer was NULL");
     } else {
       this.diagram_ptr = dia;
     }
   }
 
-  public Diagram(FeatureIndex feat_index, String seqid, Range ran, Style style) throws GTerror
+  public Diagram(FeatureIndex feat_index, String seqid, Range ran, Style style) throws GTerrorJava
   {
     Pointer dia;
     if (ran.start.longValue() > ran.end.longValue()) {
-      throw new GTerror("range.start > range.end");
+      throw new GTerrorJava("range.start > range.end");
     }
     if (style.equals(Style.class)) {
-      throw new GTerror("style parameter has to be a style Object");
+      throw new GTerrorJava("style parameter has to be a style Object");
     }
     GTerror err = new GTerror();
     synchronized (this) {
       dia = GT.INSTANCE.gt_diagram_new(feat_index.to_ptr(), seqid, ran, style.to_ptr(), err.to_ptr());
     }
     if (dia == null) {
-      throw new GTerror(err.get_err(),err.to_ptr());
+      throw new GTerrorJava(err.get_err());
     } else {
       this.diagram_ptr = dia;
     }
@@ -89,7 +90,7 @@ private TRACKSELECTOR tsf;
   {
     TRACKSELECTOR tsf = new TRACKSELECTOR()
     {
-      public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerror
+      public void callback(Pointer block_ptr, Pointer str_ptr, Pointer data_ptr) throws GTerrorJava
       {
         Block b = new Block(block_ptr);
         String s = ts.getTrackId(b);
@@ -97,7 +98,7 @@ private TRACKSELECTOR tsf;
         if (s instanceof String) {
           str.append_str(s);
         } else {
-          throw new GTerror("Track selector function must return a string");
+          throw new GTerrorJava("Track selector function must return a string");
         }
       }
     };
